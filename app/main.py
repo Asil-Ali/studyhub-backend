@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from pydantic import BaseModel, Field
+from app.schemas.questions import QuestionRequest, QuestionResponse
 
 
 app = FastAPI(
@@ -8,16 +8,14 @@ app = FastAPI(
 )
 
 
-class QuestionRequest(BaseModel):
-    question: str = Field(
-        min_length=1,
-        max_length=2000
-    )
-
-
-@app.post("/questions")
+@app.post(
+    "/questions",
+    response_model=QuestionResponse,
+    status_code=200
+)
 async def ask_question(request: QuestionRequest):
-    return {
-        "question": request.question,
-        "message": "Question received successfully"
-    }
+
+    return QuestionResponse(
+        question=request.question,
+        answer="This is a temporary answer."
+    )
