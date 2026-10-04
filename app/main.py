@@ -31,12 +31,11 @@ app = FastAPI(
 )
 async def ask_question(
     request: QuestionRequest,
-    user: dict = Depends(get_current_user)
+    user: dict = Depends(get_current_user),
+    service: QuestionService = Depends(get_question_service)
 ):
 
     require_admin(user)
-
-    service = get_question_service()
 
     answer = await service.answer_question(
         request.question
